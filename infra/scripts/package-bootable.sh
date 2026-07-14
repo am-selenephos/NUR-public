@@ -106,5 +106,8 @@ print(out)
 PY
 
 (cd "$TMP/NUR" && bash infra/scripts/secret-scan.sh)
-sha256sum "$OUT" | tee "$SHA"
+(
+    cd "$(dirname "$OUT")"
+    sha256sum "$(basename "$OUT")"
+) | tee "$SHA"
 printf 'Bootable package ready: %s\n' "$OUT"
