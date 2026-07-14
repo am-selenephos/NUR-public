@@ -18,6 +18,7 @@ jobs:
       - name: Install Playwright browser runtimes
         run: npx playwright install --with-deps chromium webkit
       - run: npm run secret-scan
+      - run: npm run v197:integrity
       - run: npm run web:typecheck
       - run: npm run web:test
       - run: npm run web:build
