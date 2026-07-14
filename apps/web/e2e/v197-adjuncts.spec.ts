@@ -228,9 +228,12 @@ test("Consultation adjunct preserves disagreement and persists stage movement", 
   await universe.locator(`[data-adjunct-action="consultation-open-${consultationId}"]`).click();
   await expect(page).toHaveURL(new RegExp(`/consultations/${consultationId}$`));
   await expect(universe.locator("#nur-v197-adjunct-root")).toContainText("A green visual test does not replace privacy proof");
+  const rootBeforeContribution = await universe.locator("#nur-v197-adjunct-root").elementHandle();
+  if (!rootBeforeContribution) throw new Error("Consultation adjunct root was not mounted");
   await universe.locator('textarea[placeholder^="Add only what belongs"]').fill("The source-bound flow worked.");
   await universe.locator('[data-adjunct-action="consultation-contribute"]').click();
   await expect.poll(() => state.consultationWrites.some(row => row.path.endsWith("/contributions"))).toBe(true);
+  await expect.poll(() => rootBeforeContribution.evaluate(node => !node.isConnected)).toBe(true);
   const movement = universe.locator(".nur-adjunct-panel").filter({ hasText: "Complete GATHER" });
   await movement.locator("textarea").fill("Evidence gathered without erasing disagreement.");
   await movement.locator('[data-adjunct-action="consultation-stage-gather"]').click();
@@ -276,8 +279,11 @@ test("Notifications are owner-written, persisted, and never fake social pressure
   await expect(adjunct).toContainText("There are no fabricated replies");
   await expect(adjunct).toContainText("Return to one real move");
 
+  const rootBeforeRead = await adjunct.elementHandle();
+  if (!rootBeforeRead) throw new Error("Notifications adjunct root was not mounted");
   await universe.locator('[data-adjunct-action="notification-read-88888888-8888-8888-8888-888888888888"]').click();
   await expect.poll(() => state.notificationWrites.some(row => row.path.endsWith("/read"))).toBe(true);
+  await expect.poll(() => rootBeforeRead.evaluate(node => !node.isConnected)).toBe(true);
 
   await universe.locator('[data-adjunct-control="notification-frequency"]').selectOption("QUIET");
   await universe.locator('[data-adjunct-action="notification-preferences-save"]').click();
@@ -285,7 +291,10 @@ test("Notifications are owner-written, persisted, and never fake social pressure
 
   await universe.locator('[data-adjunct-control="notification-title"]').fill("Return to the release proof");
   await universe.locator('[data-adjunct-control="notification-body"]').fill("Run the final owner-scoped check.");
+  const rootBeforeReminder = await universe.locator("#nur-v197-adjunct-root").elementHandle();
+  if (!rootBeforeReminder) throw new Error("Notifications reminder root was not mounted");
   await universe.locator('[data-adjunct-action="notification-reminder-create"]').click();
   await expect.poll(() => state.notificationWrites.some(row => row.path === "/notifications/reminders")).toBe(true);
+  await expect.poll(() => rootBeforeReminder.evaluate(node => !node.isConnected)).toBe(true);
   await screenshot(page, `${testInfo.project.name}-notifications-owner-ledger.png`);
 });
