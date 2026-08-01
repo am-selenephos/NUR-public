@@ -1,6 +1,6 @@
 /* ONE reusable holographic NUR wordmark. The gradient/animation live in the
    frozen CSS; variants select the exact source class stacks. */
-type Variant = "intro" | "header" | "hero" | "map" | "inline";
+type Variant = "intro" | "header" | "hero" | "map" | "inline" | "brand";
 export default function NURWordmark({ variant = "inline", text = "NUR", className = "" }:
   { variant?: Variant; text?: string; className?: string }) {
   const cls: Record<Variant, string> = {
@@ -9,6 +9,7 @@ export default function NURWordmark({ variant = "inline", text = "NUR", classNam
     hero: "nur-wordmark holo-wordmark nur-wordmark--hero",
     map: "nur-holo-word",
     inline: "nur-wordmark holo-wordmark",
+    brand: "nur-wordmark holo-wordmark orbit-scan-wordmark",
   };
   return <span className={`${cls[variant]} ${className}`.trim()}>{text}</span>;
 }
