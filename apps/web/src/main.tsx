@@ -9,6 +9,7 @@ import { OrbitStateProvider } from "./lib/orbitState";
 import { WorldFocusProvider } from "./app/worldFocus";
 import { ToastProvider } from "./routes/universe/shell/ToastLayer";
 import Landing from "./routes/Landing";
+import OrbitScan from "./routes/OrbitScan";
 import UniverseLayout from "./routes/universe/UniverseLayout";
 import Today from "./routes/universe/Today";
 import Talk from "./routes/universe/Talk";
@@ -38,6 +39,7 @@ export function AppRoutes() {
       <Route element={<PublicOnlyRoute />}>
         <Route path="/" element={<Landing />} />
         <Route path="/auth" element={<Landing />} />
+        <Route path="/orbit-scan" element={<OrbitScan />} />
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path="/capsule/:id" element={<CapsuleRoom />} />
